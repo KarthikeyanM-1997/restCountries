@@ -1,0 +1,81 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+    	.borders{
+    		border:1px solid black;
+    	}
+    </style>
+    <script>
+    
+    //api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={your api key}
+
+    var apiKey = "5dd175275d0bf22717881fb2479f13ca";
+    
+    var url = "https://restcountries.eu/rest/v2/all";
+    var json = [];
+
+    async function getCountries(){
+    	var response = await fetch(url);
+    	var data = await response.json();
+    	json = data;
+    	console.log(data);
+    	addCountry();
+    }
+
+    getCountries();
+    
+    var index = 0;
+
+    async function getWeather(lat, lng, index){
+
+	    var apiUrl = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lng + "&appid=" + apiKey;
+
+	    var response = await fetch(apiUrl);
+	    var data = await response.json();
+	    console.log(data['weather'][0]['main'] + " and " + data['weather'][0]['description']);
+	    document.getElementById("weather" + index).innerHTML = data['weather'][0]['main'] + " and " + data['weather'][0]['description'];
+    }
+
+    </script>
+</head>
+
+<body>
+    <div class="container" id="main">
+
+    </div>
+</body>
+
+<script>
+
+	function addCountry(){
+		for(var i = 0; i < 83; i++){
+			var row = document.createElement("div");
+			row.setAttribute("class", "row");
+
+			var c1 = document.createElement("div");
+			c1.setAttribute("class", "col-sm-4 borders");
+			c1.innerHTML = json[index].name + " <br> " + "<img src = '" + json[index].flag + "' style='height:100px' /> <br> Capital : " + json[index].capital + " <br> <button onclick='getWeather(" + json[index].latlng + "," + index + ")'> Get Weather </button> <div id='weather" + index + "'></div>" ;
+			row.appendChild(c1);
+
+			index++;
+
+			var C2 = document.createElement("div");
+			C2.setAttribute("class", "col-sm-4 borders");
+			C2.innerHTML = json[index].name + " <br> " + "<img src = '" + json[index].flag + "' style='height:100px' /> <br> Capital : " + json[index].capital + " <br> <button onclick='getWeather(" + json[index].latlng + "," + index + ")'> Get Weather </button> <div id='weather" + index + "'></div>" ;
+			row.appendChild(C2);
+			index++;
+
+			var C3 = document.createElement("div");
+			C3.setAttribute("class", "col-sm-4 borders");
+			C3.innerHTML = json[index].name + " <br> " + "<img src = '" + json[index].flag + "' style='height:100px' /> <br> Capital : " + json[index].capital + " <br> <button onclick='getWeather(" + json[index].latlng + "," + index + ")'> Get Weather </button> <div id='weather" + index + "'></div>" ; 
+			row.appendChild(C3);
+			index++;
+
+			document.getElementById("main").appendChild(row);
+		}
+	}
+</script>
+
+</html>
